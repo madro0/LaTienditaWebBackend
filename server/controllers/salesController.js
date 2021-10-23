@@ -6,7 +6,7 @@ const salesModel = require('../models/salesModel');
 const SalesProductModel = require('../models/salesProductModel');
 const { Sequelize } = require('sequelize');
 
-app.post('/sales',async(req, res)=>{
+const createSale = async(req, res)=>{
     let body = req.body;
     let sale = {
         total:body.total,
@@ -45,35 +45,16 @@ app.post('/sales',async(req, res)=>{
         })
     }
 
-});
+};
 
 const creatListSalesProduct= async(shoppingList, idSale)=>{
     
-    // row = JSON.parse(row);
     let row = shoppingList;
     // let row = [{amount:9,productId:"8979a336-86f1-44a2-81b8-d6a668696839"}, {amount:1,productId:"af3cecea-a0c1-4fca-9ef4-6dc7074d291b"}];
-    
-    // console.log( JSON.stringify(row) );
-    // row.map((item)=>{
-    //     console.log(item);
-    // });
 
     for(let item in row){
         row[item]['saleId']=idSale;
     }
-
-    // for(let item in row){
-    //     for(let j in row[item]){
-    //         console.log(j , row[item][j]);
-    //     }
-    // }
-    // console.log(row)
-    const a = {
-        amount: 1,
-        productId: "8979a336-86f1-44a2-81b8-d6a668696839",
-        saleId:idSale
-    }
-
     try {
         const saleDb = await SalesProductModel.bulkCreate(row);
         return saleDb;
@@ -81,4 +62,6 @@ const creatListSalesProduct= async(shoppingList, idSale)=>{
         return null;
     }
 }
-module.exports = app;
+module.exports = {
+    createSale
+}
